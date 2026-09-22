@@ -1,5 +1,9 @@
 package com.vendor.quotation_management.repository;
 
-public class PurchaseRequestRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import com.vendor.quotation_management.entity.PurchaseRequest;
 
+@Repository
+public interface PurchaseRequestRepository extends JpaRepository<PurchaseRequest, Long> {
 }

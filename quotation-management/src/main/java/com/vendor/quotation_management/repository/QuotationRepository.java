@@ -1,5 +1,9 @@
 package com.vendor.quotation_management.repository;
 
-public class QuotationRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import com.vendor.quotation_management.entity.Quotation;
 
+@Repository
+public interface QuotationRepository extends JpaRepository<Quotation, Long> {
 }
