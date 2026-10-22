@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.vendor.quotation_management.entity.PurchaseOrder;
+import com.vendor.quotation_management.exception.ResourceNotFoundException;
 import com.vendor.quotation_management.repository.PurchaseOrderRepository;
 
 @RestController
@@ -23,10 +24,8 @@ public class PurchaseOrderController {
 
     @GetMapping("/purchaseorder/{id}")
     public Object getPurchaseOrderById(@PathVariable Long id) {
-        PurchaseOrder order = repo.findById(id).orElse(null);
-        if (order == null) {
-            return "Purchase Order Not Found";
-        }
+        PurchaseOrder order = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Purchase Order not found with ID: " + id));
         logger.info("Purchase Order found: {}", order);
         return order;
     }

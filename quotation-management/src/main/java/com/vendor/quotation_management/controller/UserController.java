@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.vendor.quotation_management.entity.User;
+import com.vendor.quotation_management.exception.ResourceNotFoundException;
 import com.vendor.quotation_management.repository.UserRepository;
 
 @RestController
@@ -23,10 +24,8 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     public Object getUserById(@PathVariable Long id) {
-        User user = repo.findById(id).orElse(null);
-        if (user == null) {
-            return "User Not Found";
-        }
+        User user = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with ID: " + id));
         logger.info("User found: {}", user);
         return user;
     }

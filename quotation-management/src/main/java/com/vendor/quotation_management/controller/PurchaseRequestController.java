@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.vendor.quotation_management.entity.PurchaseRequest;
+import com.vendor.quotation_management.exception.ResourceNotFoundException;
 import com.vendor.quotation_management.repository.PurchaseRequestRepository;
 
 @RestController
@@ -23,10 +24,8 @@ public class PurchaseRequestController {
 
     @GetMapping("/purchaserequest/{id}")
     public Object getPurchaseRequestById(@PathVariable Long id) {
-        PurchaseRequest request = repo.findById(id).orElse(null);
-        if (request == null) {
-            return "Purchase Request Not Found";
-        }
+        PurchaseRequest request = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Purchase Request not found with ID: " + id));
         logger.info("Purchase Request found: {}", request);
         return request;
     }

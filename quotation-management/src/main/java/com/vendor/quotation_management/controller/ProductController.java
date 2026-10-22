@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.vendor.quotation_management.entity.Product;
+import com.vendor.quotation_management.exception.ResourceNotFoundException;
 import com.vendor.quotation_management.repository.ProductRepository;
 
 @RestController
@@ -23,10 +24,8 @@ public class ProductController {
 
     @GetMapping("/product/{id}")
     public Object getProductById(@PathVariable Long id) {
-        Product product = repo.findById(id).orElse(null);
-        if (product == null) {
-            return "Product Not Found";
-        }
+        Product product = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with ID: " + id));
         logger.info("Product found: {}", product);
         return product;
     }

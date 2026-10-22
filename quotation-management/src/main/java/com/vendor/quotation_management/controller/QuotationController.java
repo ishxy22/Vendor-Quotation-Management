@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.vendor.quotation_management.entity.Quotation;
+import com.vendor.quotation_management.exception.ResourceNotFoundException;
 import com.vendor.quotation_management.repository.QuotationRepository;
 
 @RestController
@@ -23,10 +24,8 @@ public class QuotationController {
 
     @GetMapping("/quotation/{id}")
     public Object getQuotationById(@PathVariable Long id) {
-        Quotation quotation = repo.findById(id).orElse(null);
-        if (quotation == null) {
-            return "Quotation Not Found";
-        }
+        Quotation quotation = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Quotation not found with ID: " + id));
         logger.info("Quotation found: {}", quotation);
         return quotation;
     }
