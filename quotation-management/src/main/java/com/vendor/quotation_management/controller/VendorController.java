@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.vendor.quotation_management.entity.Vendor;
+import com.vendor.quotation_management.exception.ResourceNotFoundException;
 import com.vendor.quotation_management.repository.VendorRepository;
 
 @RestController
@@ -23,10 +24,8 @@ public class VendorController {
 
     @GetMapping("/vendor/{id}")
     public Object getVendorById(@PathVariable Long id) {
-        Vendor vendor = repo.findById(id).orElse(null);
-        if (vendor == null) {
-            return "Vendor Not Found";
-        }
+        Vendor vendor = repo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vendor not found with ID: " + id));
         logger.info("Vendor found: {}", vendor);
         return vendor;
     }
